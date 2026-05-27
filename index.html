@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para la mejor mamá del mundo 💛</title>
+  <meta name="description" content="Una carta especial para el Día de las Madres" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+  <!-- ========== LOADER ========== -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-petals">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <p class="loader-text">Preparando algo especial para ti...</p>
+    </div>
+  </div>
+
+  <!-- ========== CURSOR PERSONALIZADO ========== -->
+  <div id="cursor"></div>
+  <div id="cursor-follower"></div>
+
+  <!-- ========== CONTROL DE MÚSICA ========== -->
+  <div id="music-control" aria-label="Control de música">
+    <button id="music-btn" aria-label="Reproducir música de fondo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path id="music-icon-play" d="M9 18V5l12-2v13" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+      </svg>
+    </button>
+    <span class="music-label">Música</span>
+  </div>
+
+  <!-- ========== INTRO CINEMATOGRÁFICA ========== -->
+  <section id="intro" aria-label="Introducción">
+    <canvas id="particles-canvas"></canvas>
+    <div class="intro-content">
+      <div class="intro-line" id="intro-line1">
+        <span class="intro-small">✦ Con todo mi amor ✦</span>
+      </div>
+      <div class="intro-line" id="intro-line2">
+        <h1 class="intro-title">Para la mejor</h1>
+      </div>
+      <div class="intro-line" id="intro-line3">
+        <h1 class="intro-title intro-gold">mamá del mundo</h1>
+      </div>
+      <div class="intro-line" id="intro-line4">
+        <p class="intro-subtitle">Feliz Día de las Madres</p>
+      </div>
+      <div class="intro-line" id="intro-cta">
+        <button class="btn-begin" id="begin-btn" aria-label="Comenzar la experiencia">
+          <span>Comenzar</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 5v14M5 12l7 7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="intro-overlay"></div>
+  </section>
+
+  <!-- ========== HERO PRINCIPAL ========== -->
+  <section id="hero" class="section" aria-label="Sección principal">
+    <div class="hero-bg-blur"></div>
+    <div class="hero-container">
+      <div class="hero-photo-wrap">
+        <div class="hero-photo-frame">
+          <img
+            src="assets/images/hero-photo.jpg"
+            alt="Foto principal de mamá"
+            class="hero-photo"
+            onerror="this.style.display='none'; this.parentElement.classList.add('photo-placeholder')"
+          />
+          <div class="photo-placeholder-text">📷<br/>Tu foto aquí</div>
+        </div>
+        <div class="hero-photo-glow"></div>
+        <div class="floating-hearts" aria-hidden="true">
+          <span class="heart h1">♡</span>
+          <span class="heart h2">♡</span>
+          <span class="heart h3">♡</span>
+          <span class="heart h4">♡</span>
+          <span class="heart h5">♡</span>
+        </div>
+      </div>
+      <div class="hero-text">
+        <p class="hero-tag reveal-text">✦ Día de las Madres ✦</p>
+        <h2 class="hero-heading reveal-text">
+          Gracias por ser<br/>
+          <em>mi mayor regalo</em>
+        </h2>
+        <p class="hero-desc reveal-text">
+          Cada momento contigo es un tesoro que guardo en el corazón.
+          Hoy y siempre, te celebro, te admiro y te amo.
+        </p>
+        <div class="hero-divider reveal-text"></div>
+        <p class="hero-sign reveal-text">Con amor infinito 💛</p>
+      </div>
+    </div>
+    <div class="scroll-indicator" aria-label="Desplázate hacia abajo">
+      <div class="scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- ========== CARTA EMOTIVA ========== -->
+  <section id="carta" class="section" aria-label="Carta emotiva">
+    <div class="carta-deco" aria-hidden="true"></div>
+    <div class="section-container">
+      <div class="carta-header">
+        <span class="section-tag">Una carta para ti</span>
+        <h2 class="section-title">Mamá, quiero que sepas...</h2>
+      </div>
+      <div class="carta-paper">
+        <div class="carta-inner">
+          <p class="carta-saludo">Querida mamá,</p>
+          <p class="carta-parrafo typewriter-text">
+            Hay personas que llegan a tu vida y la llenan de luz sin que te des cuenta.
+            Tú eres esa persona para mí. Desde el primer instante, me enseñaste que el amor
+            no necesita palabras, solo presencia.
+          </p>
+          <p class="carta-parrafo">
+            Recuerdo tus manos cuando me curaban las rodillas, tu voz cuando me cantabas
+            para dormir, tu risa que llenaba cualquier cuarto de alegría.
+            Esos momentos son los más valiosos que tengo.
+          </p>
+          <p class="carta-parrafo">
+            Me enseñaste a levantarme cuando caía, a soñar sin límites,
+            a dar sin esperar nada a cambio. Sin saberlo, me diste las herramientas
+            más importantes de la vida.
+          </p>
+          <p class="carta-parrafo">
+            Hoy quiero decirte lo que a veces el día a día no nos deja decir:
+          </p>
+          <p class="carta-destacado">
+            "Gracias por existir.<br/>
+            Gracias por elegirme cada día.<br/>
+            Gracias por ser mi mamá."
+          </p>
+          <p class="carta-firma">Con todo mi amor ✦</p>
+        </div>
+        <div class="carta-decorations" aria-hidden="true">
+          <span class="carta-deco-flower">✿</span>
+          <span class="carta-deco-flower cd2">✿</span>
+          <span class="carta-deco-flower cd3">✿</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== GALERÍA DE RECUERDOS ========== -->
+  <section id="galeria" class="section" aria-label="Galería de recuerdos">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Galería</span>
+        <h2 class="section-title">Nuestros Recuerdos</h2>
+        <p class="section-subtitle">Momentos que atesoro para siempre</p>
+      </div>
+      <div class="gallery-grid">
+        <!-- Foto 1 -->
+        <div class="gallery-item gallery-big" data-caption="El amor más grande">
+          <div class="gallery-img-wrap">
+            <img src="assets/images/gallery-1.jpg" alt="Recuerdo familiar 1" class="gallery-img" onerror="this.parentElement.classList.add('photo-placeholder')" />
+            <div class="photo-placeholder-text">📷 Foto 1</div>
+            <div class="gallery-overlay">
+              <span class="gallery-caption">El amor más grande</span>
+            </div>
+          </div>
+        </div>
+        <!-- Foto 2 -->
+        <div class="gallery-item" data-caption="Momentos únicos">
+          <div class="gallery-img-wrap">
+            <img src="assets/images/gallery-2.jpg" alt="Recuerdo familiar 2" class="gallery-img" onerror="this.parentElement.classList.add('photo-placeholder')" />
+            <div class="photo-placeholder-text">📷 Foto 2</div>
+            <div class="gallery-overlay">
+              <span class="gallery-caption">Momentos únicos</span>
+            </div>
+          </div>
+        </div>
+        <!-- Foto 3 -->
+        <div class="gallery-item" data-caption="Tu sonrisa, mi alegría">
+          <div class="gallery-img-wrap">
+            <img src="assets/images/gallery-3.jpg" alt="Recuerdo familiar 3" class="gallery-img" onerror="this.parentElement.classList.add('photo-placeholder')" />
+            <div class="photo-placeholder-text">📷 Foto 3</div>
+            <div class="gallery-overlay">
+              <span class="gallery-caption">Tu sonrisa, mi alegría</span>
+            </div>
+          </div>
+        </div>
+        <!-- Foto 4 -->
+        <div class="gallery-item" data-caption="Juntos siempre">
+          <div class="gallery-img-wrap">
+            <img src="assets/images/gallery-4.jpg" alt="Recuerdo familiar 4" class="gallery-img" onerror="this.parentElement.classList.add('photo-placeholder')" />
+            <div class="photo-placeholder-text">📷 Foto 4</div>
+            <div class="gallery-overlay">
+              <span class="gallery-caption">Juntos siempre</span>
+            </div>
+          </div>
+        </div>
+        <!-- Foto 5 -->
+        <div class="gallery-item gallery-wide" data-caption="El hogar más cálido del mundo">
+          <div class="gallery-img-wrap">
+            <img src="assets/images/gallery-5.jpg" alt="Recuerdo familiar 5" class="gallery-img" onerror="this.parentElement.classList.add('photo-placeholder')" />
+            <div class="photo-placeholder-text">📷 Foto 5</div>
+            <div class="gallery-overlay">
+              <span class="gallery-caption">El hogar más cálido del mundo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LÍNEA DEL TIEMPO ========== -->
+  <section id="timeline" class="section" aria-label="Línea del tiempo de recuerdos">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-tag">Historia</span>
+        <h2 class="section-title">Momentos que nos unen</h2>
+        <p class="section-subtitle">Una línea de amor a través del tiempo</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-line" aria-hidden="true"></div>
+
+        <div class="timeline-item tl-left">
+          <div class="tl-dot" aria-hidden="true">✦</div>
+          <div class="tl-card">
+            <span class="tl-year">Desde siempre</span>
+            <h3 class="tl-title">El primer abrazo</h3>
+            <p class="tl-desc">Cuando llegué al mundo, tú estabas ahí. Ese primer abrazo tuyo fue el más cálido y seguro que he sentido.</p>
+            <span class="tl-icon" aria-hidden="true">🌸</span>
+          </div>
+        </div>
+
+        <div class="timeline-item tl-right">
+          <div class="tl-dot" aria-hidden="true">✦</div>
+          <div class="tl-card">
+            <span class="tl-year">La infancia</span>
+            <h3 class="tl-title">Mis primeros pasos</h3>
+            <p class="tl-desc">Me enseñaste a caminar, a caer y a levantarme. Siempre estuviste ahí para tomarme de la mano.</p>
+            <span class="tl-icon" aria-hidden="true">👣</span>
+          </div>
+        </div>
+
+        <div class="timeline-item tl-left">
+          <div class="tl-dot" aria-hidden="true">✦</div>
+          <div class="tl-card">
+            <span class="tl-year">Cumpleaños</span>
+            <h3 class="tl-title">Celebraciones juntos</h3>
+            <p class="tl-desc">Cada cumpleaños fue mágico gracias a ti. Hacías que cada momento se sintiera especial y lleno de amor.</p>
+            <span class="tl-icon" aria-hidden="true">🎂</span>
+          </div>
+        </div>
+
+        <div class="timeline-item tl-right">
+          <div class="tl-dot" aria-hidden="true">✦</div>
+          <div class="tl-card">
+            <span class="tl-year">Aventuras</span>
+            <h3 class="tl-title">Viajes y descubrimientos</h3>
+            <p class="tl-desc">Cada lugar que exploramos juntos se convirtió en un recuerdo imborrable. Tú hacías que todo destino fuera extraordinario.</p>
+            <span class="tl-icon" aria-hidden="true">✈️</span>
+          </div>
+        </div>
+
+        <div class="timeline-item tl-left">
+          <div class="tl-dot" aria-hidden="true">✦</div>
+          <div class="tl-card">
+            <span class="tl-year">Hoy</span>
+            <h3 class="tl-title">Este momento</h3>
+            <p class="tl-desc">Hoy te celebro a ti, a tu fuerza, a tu amor, a todo lo que eres. Feliz Día de las Madres, mamá. Te amo.</p>
+            <span class="tl-icon" aria-hidden="true">💛</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MENSAJE FINAL ========== -->
+  <section id="final" class="section" aria-label="Mensaje final">
+    <canvas id="final-particles"></canvas>
+    <div class="final-overlay"></div>
+    <div class="final-content">
+      <div class="final-roses" aria-hidden="true">
+        <span class="rose r1">✿</span>
+        <span class="rose r2">✿</span>
+        <span class="rose r3">✿</span>
+      </div>
+      <p class="final-tag">✦ Con todo lo que soy ✦</p>
+      <h2 class="final-title">
+        Gracias por todo,<br/>
+        <span class="final-gold">mamá</span>
+      </h2>
+      <div class="final-hearts" aria-hidden="true">
+        <span>♡</span><span>♡</span><span>♡</span>
+      </div>
+      <p class="final-message">
+        En cada amanecer pienso en ti.<br/>
+        En cada logro, te llevo conmigo.<br/>
+        Eres mi hogar, mi fuerza, mi todo.
+      </p>
+      <p class="final-date">Feliz Día de las Madres · 2025</p>
+      <button class="btn-restart" id="restart-btn" aria-label="Volver al inicio">
+        ↑ Volver al inicio
+      </button>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="js/music.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
