@@ -1,118 +1,159 @@
 /* ============================================================
-   music.js — Módulo de música de fondo
-   Genera música ambient con Web Audio API (sin archivos externos)
+   music.js — Música de fondo vía YouTube IFrame API
+   Canción: "A Thousand Years" - Christina Perri (instrumental)
+   El iframe queda oculto; solo se controla play/pause/volumen
    ============================================================ */
 
 const MusicModule = (() => {
-  let audioCtx = null;
-  let masterGain = null;
+  /* ── Cambia este ID por cualquier video de YouTube que prefieras ── */
+  const YOUTUBE_ID = 'oygrmJFkg68'; // Christina Perri - A Thousand Years (piano)
+
+  let player = null;
+  let isReady = false;
   let isPlaying = false;
-  let oscillators = [];
-  let fadeInterval = null;
-  const TARGET_VOLUME = 0.06;
+  let apiLoaded = false;
 
-  /* Crea el contexto de audio (requiere gesto del usuario) */
-  function initAudio() {
-    if (audioCtx) return;
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    masterGain = audioCtx.createGain();
-    masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-    masterGain.connect(audioCtx.destination);
+  /* Crea el contenedor oculto del iframe */
+  function createPlayerContainer() {
+    const wrap = document.createElement('div');
+    wrap.id = 'yt-player-wrap';
+    wrap.setAttribute('aria-hidden', 'true');
+    wrap.style.cssText = `
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      bottom: 0;
+      left: 0;
+      z-index: -1;
+    `;
+    const div = document.createElement('div');
+    div.id = 'yt-player';
+    wrap.appendChild(div);
+    document.body.appendChild(wrap);
   }
 
-  /* Crea un oscilador suave (onda sinusoidal) */
-  function createTone(freq, gainVal, type = 'sine') {
-    const osc = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    const filter = audioCtx.createBiquadFilter();
+  /* Carga la YouTube IFrame API una sola vez */
+  function loadYouTubeAPI() {
+    if (apiLoaded) return;
+    apiLoaded = true;
 
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    osc.frequency.setTargetAtTime(freq * 1.002, audioCtx.currentTime, 8);
-
-    filter.type = 'lowpass';
-    filter.frequency.value = 600;
-    filter.Q.value = 0.8;
-
-    g.gain.setValueAtTime(gainVal, audioCtx.currentTime);
-
-    osc.connect(filter);
-    filter.connect(g);
-    g.connect(masterGain);
-    osc.start();
-
-    return { osc, g };
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
   }
 
-  /* Genera acordes suaves: Do mayor y La menor alternando */
-  function startMusic() {
-    initAudio();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    // Notas base (Hz): C3, E3, G3, A2, C3, E3
-    const tones = [
-      { freq: 130.81, gain: 0.6 }, // C3
-      { freq: 164.81, gain: 0.4 }, // E3
-      { freq: 196.00, gain: 0.35 }, // G3
-      { freq: 110.00, gain: 0.5 }, // A2
-      { freq: 174.61, gain: 0.3 }, // F3
-      { freq: 261.63, gain: 0.2 }, // C4
-    ];
-
-    tones.forEach(({ freq, gain }) => {
-      const t = createTone(freq, gain * 0.08, 'sine');
-      oscillators.push(t);
+  /* Callback global que llama YouTube cuando su API está lista */
+  window.onYouTubeIframeAPIReady = function () {
+    player = new YT.Player('yt-player', {
+      videoId: YOUTUBE_ID,
+      playerVars: {
+        autoplay: 0,
+        loop: 1,
+        playlist: YOUTUBE_ID, // necesario para que loop funcione
+        controls: 0,
+        modestbranding: 1,
+        rel: 0,
+        iv_load_policy: 3,
+        fs: 0,
+      },
+      events: {
+        onReady: (e) => {
+          isReady = true;
+          e.target.setVolume(30); // volumen suave (0–100)
+        },
+        onError: (e) => {
+          console.warn('YouTube player error:', e.data);
+        }
+      }
     });
+  };
 
-    // Sub-bass
-    const bass = createTone(65.41, 0.3, 'triangle');
-    oscillators.push(bass);
-
-    // Fade in suave
-    masterGain.gain.setTargetAtTime(TARGET_VOLUME, audioCtx.currentTime, 2.5);
-    isPlaying = true;
+  /* Fade in de volumen (0 → 30 en 3 s) */
+  function fadeIn() {
+    if (!player || !isReady) return;
+    let vol = 0;
+    player.setVolume(0);
+    const interval = setInterval(() => {
+      vol += 2;
+      player.setVolume(vol);
+      if (vol >= 30) clearInterval(interval);
+    }, 200);
   }
 
-  /* Detiene la música con fade out */
-  function stopMusic() {
-    if (!audioCtx || !isPlaying) return;
-    masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 1.2);
-    setTimeout(() => {
-      oscillators.forEach(({ osc }) => {
-        try { osc.stop(); } catch (e) { /* ya detenido */ }
-      });
-      oscillators = [];
-    }, 3500);
-    isPlaying = false;
+  /* Fade out de volumen (actual → 0 en 2 s) */
+  function fadeOut(callback) {
+    if (!player || !isReady) { if (callback) callback(); return; }
+    let vol = player.getVolume();
+    const interval = setInterval(() => {
+      vol -= 3;
+      if (vol <= 0) {
+        player.setVolume(0);
+        player.pauseVideo();
+        clearInterval(interval);
+        if (callback) callback();
+      } else {
+        player.setVolume(vol);
+      }
+    }, 120);
   }
 
-  /* Toggle play/pause */
+  /* Toggle play / pause */
   function toggle() {
-    if (isPlaying) {
-      stopMusic();
-    } else {
-      startMusic();
+    if (!player || !isReady) {
+      console.warn('Player aún no está listo');
+      return isPlaying;
     }
+
+    if (isPlaying) {
+      fadeOut(() => { isPlaying = false; });
+    } else {
+      player.playVideo();
+      fadeIn();
+      isPlaying = true;
+    }
+
     return isPlaying;
   }
 
-  /* API pública */
-  return { toggle, isPlaying: () => isPlaying };
+  /* Inicializa todo (se llama al primer clic o al cargar) */
+  function init() {
+    createPlayerContainer();
+    loadYouTubeAPI();
+  }
+
+  return { init, toggle, isPlaying: () => isPlaying };
 })();
 
-/* ---------- UI del botón de música ---------- */
+/* ── UI del botón ── */
 document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('music-btn');
+  const btn     = document.getElementById('music-btn');
   const control = document.getElementById('music-control');
+  let   initialized = false;
 
   if (!btn) return;
 
   btn.addEventListener('click', () => {
+    /* Inicializar solo la primera vez (requiere gesto del usuario) */
+    if (!initialized) {
+      MusicModule.init();
+      initialized = true;
+
+      /* Pequeño delay para que la API cargue antes de dar play */
+      setTimeout(() => {
+        const playing = MusicModule.toggle();
+        btn.classList.toggle('playing', playing);
+        btn.setAttribute('aria-label', playing ? 'Pausar música' : 'Reproducir música');
+      }, 1800);
+      return;
+    }
+
     const playing = MusicModule.toggle();
     btn.classList.toggle('playing', playing);
-    btn.setAttribute('aria-label', playing ? 'Pausar música' : 'Reproducir música de fondo');
+    btn.setAttribute('aria-label', playing ? 'Pausar música' : 'Reproducir música');
   });
 
-  /* Mostrar control tras cargar */
+  /* Mostrar el control tras cargar la página */
   setTimeout(() => control?.classList.add('visible'), 2500);
 });
