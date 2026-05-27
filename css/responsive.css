@@ -1,0 +1,124 @@
+/* ============================================================
+   responsive.css — Estilos adaptativos
+   Breakpoints: tablet 768px | móvil 480px
+   ============================================================ */
+
+/* ---------- Tablet ---------- */
+@media (max-width: 900px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    text-align: center;
+  }
+
+  .hero-photo-frame { max-width: 300px; }
+  .hero-photo-wrap { display: flex; flex-direction: column; align-items: center; }
+  .hero-text { display: flex; flex-direction: column; align-items: center; }
+  .hero-desc { text-align: center; }
+  .hero-divider { margin: 0 auto 1.5rem; }
+
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+
+  .gallery-big { grid-column: 1 / 3; grid-row: 1; }
+  .gallery-wide { grid-column: 1 / 3; grid-row: auto; }
+
+  .timeline-line { left: 20px; }
+
+  .timeline-item,
+  .tl-right {
+    width: 100%;
+    left: 0;
+    padding: 0 0 2.5rem 3.5rem;
+  }
+
+  .tl-left .tl-card { text-align: left; }
+
+  .tl-dot,
+  .tl-right .tl-dot {
+    right: auto;
+    left: 8px;
+    top: 0.2rem;
+  }
+
+  .carta-paper { padding: 2.5rem 2rem; }
+}
+
+/* ---------- Móvil grande ---------- */
+@media (max-width: 768px) {
+  .section { padding: 6rem 1.5rem; }
+
+  #music-control { top: 1rem; right: 1rem; }
+  #music-btn { width: 40px; height: 40px; }
+  #music-btn svg { width: 18px; height: 18px; }
+
+  .intro-title { font-size: clamp(2.2rem, 10vw, 3.8rem); }
+
+  .section-title { font-size: clamp(1.8rem, 5vw, 2.8rem); }
+
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-big, .gallery-wide { grid-column: 1; }
+
+  .gallery-img-wrap { min-height: 200px; }
+
+  .final-title { font-size: clamp(2.4rem, 10vw, 4.5rem); }
+}
+
+/* ---------- Móvil pequeño ---------- */
+@media (max-width: 480px) {
+  body { font-size: 15px; }
+
+  #cursor, #cursor-follower { display: none; }
+  body { cursor: default; }
+  button { cursor: pointer; }
+
+  .section { padding: 5rem 1.2rem; }
+
+  .intro-title { font-size: clamp(2rem, 11vw, 3rem); }
+  .btn-begin { padding: 0.8rem 1.8rem; font-size: 0.75rem; }
+
+  .hero-photo-frame { max-width: 240px; }
+
+  .hero-heading { font-size: clamp(1.9rem, 7vw, 2.8rem); }
+
+  .carta-paper {
+    padding: 2rem 1.4rem;
+  }
+
+  .carta-paper::before { left: 1.4rem; }
+  .carta-parrafo { font-size: 1rem; }
+  .carta-destacado { font-size: 1.1rem; padding-left: 1rem; }
+
+  .gallery-grid { gap: 0.6rem; }
+  .gallery-img-wrap { min-height: 180px; }
+
+  .tl-card { padding: 1.2rem 1.4rem; }
+  .tl-title { font-size: 1.1rem; }
+  .tl-desc { font-size: 0.82rem; }
+
+  .final-title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+  .final-message { font-size: 1rem; }
+
+  .section-header, .carta-header { margin-bottom: 2.5rem; }
+}
+
+/* ---------- Preferencia de movimiento reducido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .petal { display: none; }
+  .heart { animation: none; opacity: 0.5; }
+  .rose  { animation: none; opacity: 0.6; }
+}
+
+/* ---------- Landscape móvil ---------- */
+@media (max-width: 768px) and (orientation: landscape) {
+  #intro { min-height: auto; padding: 5rem 2rem; }
+  .intro-title { font-size: clamp(1.8rem, 6vw, 3rem); }
+}
